@@ -21,5 +21,6 @@
 - 保持变更小而规格驱动；每个 OpenSpec change 只做一个能力。
 - 项目文档使用中文；代码标识符使用英文。
 - 不要提交密钥（`.env*`、凭证文件等）。
+- 包管理使用 **pnpm**（`pnpm install` / `pnpm add` / `pnpm dev`），勿用 npm 或 yarn。
 - Git 提交信息格式：`<type>(<scope>): <subject>`，例如 `feat(base0703): 添加首页 Hero`。scope 必填，当前迭代可用 `base0703`。
 - **AI 执行 git commit 前必须先给出完整 commit message 供用户审核**；用户确认或修改后再执行提交，不得擅自 commit。

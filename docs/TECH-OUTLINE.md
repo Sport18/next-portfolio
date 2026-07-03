@@ -148,6 +148,7 @@ next-portfolio/
 | 工具 | 用途 |
 |------|------|
 | **Git** | 版本控制 |
+| **pnpm** | 包管理（`pnpm install` / `pnpm dev`） |
 | **ESLint** | 代码规范（已配置） |
 | **Vercel** | 生产部署（推荐） |
 | **OpenSpec CLI** | `openspec validate`、`openspec schemas` |

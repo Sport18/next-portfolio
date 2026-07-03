@@ -6,10 +6,11 @@
 
 ## 本地开发
 
-启动开发服务器：
+本项目使用 [pnpm](https://pnpm.io) 管理依赖。请先安装 pnpm（`npm install -g pnpm`），然后：
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 浏览器打开 [http://localhost:3000](http://localhost:3000) 查看效果。
