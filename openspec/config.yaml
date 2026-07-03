@@ -1,0 +1,21 @@
+schema: superspec
+
+context: |
+  项目：next-portfolio — 个人作品集网站。
+  技术栈：Next.js 16（App Router）、React 19、TypeScript 5、Tailwind CSS 4。
+  开发流程：OpenSpec + Superspec + Superpowers（规格驱动 + TDD）。
+  完整技术决策与路线图见 docs/TECH-OUTLINE.md。
+
+  约定：
+  - 编写 Next.js 代码前查阅 node_modules/next/dist/docs/（v16 有破坏性变更）。
+  - 内容初期使用 src/content/ 下的 JSON；/edit 为后期功能。
+  - 优先小而可审查的 OpenSpec 变更，避免大而全的多功能 PR。
+  - 项目文档（docs/、README、AGENTS.md 等）使用中文；代码标识符保持英文。
+
+rules:
+  proposal:
+    - 必须包含「非目标」章节
+    - 引用已有的相关能力规格
+  tasks:
+    - 将工作拆分为单次会话可完成的块
+    - 每个任务组包含验收步骤
