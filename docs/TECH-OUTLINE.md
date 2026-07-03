@@ -151,10 +151,45 @@ next-portfolio/
 | **ESLint** | 代码规范（已配置） |
 | **Vercel** | 生产部署（推荐） |
 | **OpenSpec CLI** | `openspec validate`、`openspec schemas` |
+| **Commitlint + Husky** | 校验 Git 提交信息格式 |
 
 ---
 
-## 8. 下一步
+## 8. Git 提交规范
+
+每次提交使用 Conventional Commits 格式：
+
+```text
+<type>(<scope>): <subject>
+```
+
+**示例：**
+
+```text
+feat(base0703): 添加首页 Hero 区块
+fix(base0703): 修复导航链接样式
+docs(base0703): 初始化 OpenSpec 与项目文档
+```
+
+| 字段 | 说明 |
+|------|------|
+| `type` | `feat` `fix` `docs` `style` `refactor` `perf` `test` `build` `ci` `chore` `revert` |
+| `scope` | 迭代或模块标识（小写必填），当前迭代示例：`base0703` |
+| `subject` | 简短中文说明，句末不加句号 |
+
+提交时会由 Husky + Commitlint 自动校验；格式不对会拒绝提交。
+
+**AI 提交约定：** Agent 执行 `git commit` 前，必须先将拟用的完整 commit message 发给用户审核；用户确认或修改后再提交，不得跳过审核直接 commit。
+
+本地启用提交模板（可选，一次性配置）：
+
+```bash
+git config commit.template .gitmessage
+```
+
+---
+
+## 9. 下一步
 
 1. 安装 Superpowers：在 Cursor Agent 聊天中输入 `/add-plugin superpowers`
 2. 重启 Cursor，使 `/opsx:*` 命令生效

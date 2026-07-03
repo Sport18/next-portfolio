@@ -1,0 +1,22 @@
+# <type>(<scope>): <subject>
+#
+# 格式示例:
+#   feat(base0703): 添加首页 Hero 区块
+#   fix(base0703): 修复编辑页表单样式
+#   docs(base0703): 补充技术大纲网络与数据章节
+#
+# type 说明:
+#   feat     新功能
+#   fix      修复 bug
+#   docs     文档变更
+#   style    代码格式（不影响逻辑）
+#   refactor 重构
+#   perf     性能优化
+#   test     测试
+#   build    构建/依赖
+#   ci       CI 配置
+#   chore    杂项
+#   revert   回滚
+#
+# scope: 迭代或模块标识（小写），当前迭代示例 base0703
+# subject: 简短说明，中文，句末不加句号

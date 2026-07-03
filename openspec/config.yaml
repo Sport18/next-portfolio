@@ -11,6 +11,8 @@ context: |
   - 内容初期使用 src/content/ 下的 JSON；/edit 为后期功能。
   - 优先小而可审查的 OpenSpec 变更，避免大而全的多功能 PR。
   - 项目文档（docs/、README、AGENTS.md 等）使用中文；代码标识符保持英文。
+  - Git 提交格式：`<type>(<scope>): <subject>`，scope 示例 `base0703`。
+  - AI 执行 git commit 前须将 commit message 提交用户审核，确认后再 commit。
 
 rules:
   proposal:
