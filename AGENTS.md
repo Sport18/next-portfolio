@@ -23,4 +23,8 @@
 - 不要提交密钥（`.env*`、凭证文件等）。
 - 包管理使用 **pnpm**（`pnpm install` / `pnpm add` / `pnpm dev`），勿用 npm 或 yarn。
 - Git 提交信息格式：`<type>(<scope>): <subject>`，例如 `feat(base0703): 添加首页 Hero`。scope 必填，当前迭代可用 `base0703`。
-- **AI 执行 git commit 前必须先给出完整 commit message 供用户审核**；用户确认或修改后再执行提交，不得擅自 commit。
+- **AI Git 提交审核流程（强制）：**
+  1. 执行 `git commit` 前，**必须在当次回复中**列出完整 commit message（含变更摘要），明确请用户审核。
+  2. **必须等待用户明确确认**（如「确认」、或给出修改后的 message）后，**下一轮**才可执行 `git add` / `git commit`。
+  3. 用户仅说「提交」「commit」等，**不视为**对 message 的确认；不得因上一轮已展示过 message 而跳过当次审核。
+  4. 未经用户确认，**不得**擅自 commit。

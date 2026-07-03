@@ -180,7 +180,24 @@ docs(base0703): 初始化 OpenSpec 与项目文档
 
 提交时会由 Husky + Commitlint 自动校验；格式不对会拒绝提交。
 
-**AI 提交约定：** Agent 执行 `git commit` 前，必须先将拟用的完整 commit message 发给用户审核；用户确认或修改后再提交，不得跳过审核直接 commit。
+### AI 提交审核流程（强制）
+
+Agent 代为用户执行 `git commit` 时，必须遵守：
+
+1. **当次展示**：在准备提交的那一轮回复中，列出完整 commit message 与变更摘要，并明确请用户审核。
+2. **等待确认**：用户明确回复「确认」或给出修改后的 message 后，**下一轮**才可执行提交。
+3. **禁止推断**：用户只说「提交」「commit」「push」等，**不能**视为已确认 message；不得引用上一轮已展示的 message 跳过当次审核。
+4. **禁止擅自提交**：未获用户确认前，不得运行 `git commit`。
+
+**正确流程示例：**
+
+```text
+Agent：拟用 commit message 如下，请确认：
+       chore(base0703): 切换包管理器为 pnpm
+       （变更摘要：…）
+User：确认
+Agent：（下一轮）执行 git commit
+```
 
 本地启用提交模板（可选，一次性配置）：
 

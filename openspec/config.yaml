@@ -13,7 +13,7 @@ context: |
   - 项目文档（docs/、README、AGENTS.md 等）使用中文；代码标识符保持英文。
   - Git 提交格式：`<type>(<scope>): <subject>`，scope 示例 `base0703`。
   - 包管理使用 pnpm（packageManager: pnpm@10.34.4），勿用 npm/yarn。
-  - AI 执行 git commit 前须将 commit message 提交用户审核，确认后再 commit。
+  - AI Git 提交：当次回复须列出完整 commit message 并请用户审核；用户明确确认后下一轮才可 commit；仅说「提交」不算确认；不得擅自 commit。
 
 rules:
   proposal:
@@ -22,3 +22,4 @@ rules:
   tasks:
     - 将工作拆分为单次会话可完成的块
     - 每个任务组包含验收步骤
+    - 涉及 git commit 时：当次列出 message 等用户确认，未确认不得 commit
