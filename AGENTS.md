@@ -22,6 +22,10 @@
 - 项目文档使用中文；代码标识符使用英文。
 - 不要提交密钥（`.env*`、凭证文件等）。
 - 包管理使用 **pnpm**（`pnpm install` / `pnpm add` / `pnpm dev`），勿用 npm 或 yarn。
+- **客户端数据请求与缓存**统一使用 `@tanstack/react-query`：
+  - 根布局通过 `QueryProvider`（`src/components/providers/query-provider.tsx`）注入 `QueryClientProvider`。
+  - 组件内使用 `useQuery` / `useMutation` 发起请求与管理状态，勿在 Client Component 中用 `useEffect` + `useState` 手写请求逻辑。
+  - 服务端首屏数据仍可在 Server Component 中直接读取（如 `src/content/*.json`）；需客户端刷新、轮询、乐观更新或跨组件共享缓存时，改用 React Query。
 - Git 提交信息格式：`<type>(<scope>): <subject>`，例如 `feat(base0703): 添加首页 Hero`。scope 必填，当前迭代可用 `base0703`。
 - **AI Git 提交审核流程（强制）：**
   1. 执行 `git commit` 前，**必须在当次回复中**列出完整 commit message（含变更摘要），明确请用户审核。

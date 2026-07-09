@@ -59,8 +59,15 @@
 | React | 19.x | UI 组件 |
 | TypeScript | 5.x | 类型安全 |
 | Tailwind CSS | 4.x | 样式、响应式、暗色模式基础 |
+| @tanstack/react-query | 5.x | 客户端数据请求、缓存与状态管理 |
 
 > **注意**：Next.js 16 的 API 与常见文档有差异，写代码前请查阅 `node_modules/next/dist/docs/`。
+
+#### 数据请求约定
+
+- 根布局挂载 `QueryProvider`，内部使用 `QueryClient` + `QueryClientProvider`（见 `src/components/providers/query-provider.tsx`）。
+- Client Component 中通过 `useQuery` / `useMutation` 请求与管理异步数据；避免 `useEffect` + `fetch` + `useState` 的 ad-hoc 模式。
+- Server Component 仍可直接读取本地内容或调用服务端 API；需要客户端缓存、重试、失效刷新时再下沉到 React Query。
 
 ### 3.2 计划引入（按优先级）
 
@@ -107,6 +114,7 @@ next-portfolio/
 │   │   └── edit/                # 编辑页（已有占位）
 │   ├── components/
 │   │   ├── layout/              # 页头、页脚、导航
+│   │   ├── providers/           # QueryProvider 等全局 Provider
 │   │   ├── sections/            # Hero、项目、关于等区块
 │   │   └── ui/                  # 按钮、卡片、徽章等
 │   ├── content/                 # JSON 内容文件
