@@ -26,6 +26,11 @@
   - 根布局通过 `QueryProvider`（`src/components/providers/query-provider.tsx`）注入 `QueryClientProvider`。
   - 组件内使用 `useQuery` / `useMutation` 发起请求与管理状态，勿在 Client Component 中用 `useEffect` + `useState` 手写请求逻辑。
   - 服务端首屏数据仍可在 Server Component 中直接读取（如 `src/content/*.json`）；需客户端刷新、轮询、乐观更新或跨组件共享缓存时，改用 React Query。
+- **后端与持久化**统一使用 **Supabase + PostgreSQL**：
+  - MVP 展示内容仍读 `src/content/*.json`；需登录、跨设备同步、在线编辑、工具配置或记录写入时再接入 Supabase。
+  - 数据库为 Supabase 托管的 PostgreSQL；鉴权用 Supabase Auth；私人数据通过 Row Level Security（RLS）限制为仅本人可读写。
+  - 服务端读写经 Next.js Route Handler / Server Action；客户端经 React Query 调用上述 API，勿在前端直连数据库凭证。
+  - 环境变量：`NEXT_PUBLIC_SUPABASE_URL`、`NEXT_PUBLIC_SUPABASE_ANON_KEY`（可公开）；`SUPABASE_SERVICE_ROLE_KEY` 仅服务端、勿提交仓库。
 - Git 提交信息格式：`<type>(<scope>): <subject>`，例如 `feat(base0703): 添加首页 Hero`。scope 必填，当前迭代可用 `base0703`。
 - **AI Git 提交审核流程（强制）：**
   1. 执行 `git commit` 前，**必须在当次回复中**列出完整 commit message（含变更摘要），明确请用户审核。

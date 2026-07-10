@@ -4,9 +4,9 @@
 
 ## 1. 项目定位
 
-- **类型**：个人作品集网站
-- **目标**：展示个人信息、项目作品、技能与联系方式
-- **阶段**：MVP 以静态展示为主；`/edit` 编辑能力作为后期独立变更（change）
+- **类型**：个人网站（作品集 → 工具集 → 记录本 → 实验场）
+- **目标**：展示个人信息与项目；后续扩展私人工具、记录与各类原型实验
+- **阶段**：MVP 以静态展示为主；持久化与 `/edit` 等能力作为后期独立变更（change）
 
 ---
 
@@ -69,7 +69,34 @@
 - Client Component 中通过 `useQuery` / `useMutation` 请求与管理异步数据；避免 `useEffect` + `fetch` + `useState` 的 ad-hoc 模式。
 - Server Component 仍可直接读取本地内容或调用服务端 API；需要客户端缓存、重试、失效刷新时再下沉到 React Query。
 
-### 3.2 计划引入（按优先级）
+### 3.2 后端平台（已定选型）
+
+| 技术 | 用途 |
+|------|------|
+| **Supabase** | BaaS 平台：PostgreSQL、Auth、Storage、RLS |
+| **PostgreSQL** | 关系型主库（Supabase 托管） |
+
+> 接入时机：首个需要登录、跨设备同步或频繁写入的功能（如 `/edit`、笔记、工具配置）再初始化 Supabase 项目；此前继续 JSON 文件即可。
+
+#### 后端约定
+
+- **数据访问**：Next.js Route Handler / Server Action 读写数据库；Client Component 通过 React Query 调用 API，不在浏览器持有 service role key。
+- **鉴权**：Supabase Auth（邮箱或 OAuth）；私人路由与 mutation 须校验 session。
+- **权限**：公开内容可读；用户私有数据（笔记、草稿、工具配置等）在 PostgreSQL 层启用 RLS，按 `auth.uid()` 限制读写。
+- **Schema 组织**：按业务域分表（如 `profiles`、`projects`、`notes`、`tools`）；实验性数据可用 JSONB 字段，验证后再规范化。
+- **环境变量**：
+  - `NEXT_PUBLIC_SUPABASE_URL`、`NEXT_PUBLIC_SUPABASE_ANON_KEY` — 客户端与服务端均可使用
+  - `SUPABASE_SERVICE_ROLE_KEY` — 仅服务端、绕过 RLS 的运维场景；**不得提交仓库**
+
+#### 目标目录（接入 Supabase 后）
+
+```text
+src/lib/supabase/     # 浏览器 / 服务端 Supabase 客户端
+src/lib/db/           # Drizzle schema、迁移与查询（计划引入）
+supabase/             # 本地迁移与 RLS 策略（可选）
+```
+
+### 3.3 计划引入（按优先级）
 
 | 技术 | 阶段 | 用途 |
 |------|------|------|
@@ -79,16 +106,18 @@
 | **clsx + tailwind-merge** | P1 | 条件 className 合并 |
 | **Vitest** | P1 | 单元/组件测试（配合 Superpowers TDD） |
 | **@testing-library/react** | P1 | React 组件测试 |
+| **Supabase JS + SSR 客户端** | P2 | Auth、DB、Storage 接入 |
+| **Drizzle ORM** | P2 | PostgreSQL schema 与类型安全查询 |
 | **framer-motion** | P2 | 页面动效（可选） |
 | **Playwright** | P2 | 端到端测试（可选） |
 
-### 3.3 内容管理策略
+### 3.4 内容管理策略
 
 | 阶段 | 方案 | 说明 |
 |------|------|------|
 | **第一阶段** | `src/content/*.json` | 个人信息、项目、技能 |
 | **第二阶段** | MDX（可选） | 博客或长文 |
-| **第三阶段** | `/edit` + API | 浏览器内编辑，需鉴权 |
+| **第三阶段** | Supabase + `/edit` | 浏览器内编辑与私人记录，Supabase Auth + PostgreSQL |
 
 ---
 
@@ -111,14 +140,19 @@ next-portfolio/
 │   │   ├── layout.tsx
 │   │   ├── about/               # 关于我
 │   │   ├── projects/[slug]/   # 项目详情
+│   │   ├── tools/               # 工具集（后期）
+│   │   ├── lab/                 # 实验原型（后期）
 │   │   └── edit/                # 编辑页（已有占位）
 │   ├── components/
 │   │   ├── layout/              # 页头、页脚、导航
 │   │   ├── providers/           # QueryProvider 等全局 Provider
 │   │   ├── sections/            # Hero、项目、关于等区块
 │   │   └── ui/                  # 按钮、卡片、徽章等
-│   ├── content/                 # JSON 内容文件
-│   └── lib/                     # 工具函数、内容读取
+│   ├── content/                 # JSON 内容文件（MVP）
+│   └── lib/
+│       ├── supabase/            # Supabase 客户端（P2 接入）
+│       └── db/                  # Drizzle schema / 查询（P2 接入）
+├── supabase/                    # 迁移与 RLS（P2 接入，可选）
 └── public/
 ```
 
@@ -132,6 +166,7 @@ next-portfolio/
 | `content` | 个人信息 / 项目 / 技能 数据模型 |
 | `presentation` | 组件规范、响应式断点、动效策略 |
 | `editing` | `/edit` 行为（第三阶段，先占位） |
+| `backend` | Supabase Auth、PostgreSQL 数据模型、RLS（P2 起） |
 
 ---
 
@@ -145,7 +180,8 @@ next-portfolio/
 | P1 | `about-section` | 关于我、技能展示 |
 | P1 | `contact-links` | 社交链接 / 联系方式 |
 | P2 | `content-data-layer` | JSON 数据层 + Zod 校验 |
-| P2 | `edit-page` | 实现 `/edit` 真实逻辑 |
+| P2 | `supabase-foundation` | Supabase 客户端、首表 schema、Auth 与 RLS 基线 |
+| P2 | `edit-page` | 实现 `/edit` 真实逻辑（依赖 supabase-foundation） |
 | P3 | `seo-analytics` | sitemap、metadata 完善 |
 | P3 | `i18n` | 多语言（若需要） |
 
@@ -158,7 +194,8 @@ next-portfolio/
 | **Git** | 版本控制 |
 | **pnpm** | 包管理（`pnpm install` / `pnpm dev`） |
 | **ESLint** | 代码规范（已配置） |
-| **Vercel** | 生产部署（推荐） |
+| **Vercel** | 前端生产部署（推荐） |
+| **Supabase** | PostgreSQL、Auth、Storage 托管 |
 | **OpenSpec CLI** | `openspec validate`、`openspec schemas` |
 | **Commitlint + Husky** | 校验 Git 提交信息格式 |
 
